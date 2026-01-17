@@ -96,9 +96,14 @@ export default async function DashboardPage() {
                             <div className="card-body p-6">
                                 <h3 className="card-title text-lg mb-2">Butuh Bantuan?</h3>
                                 <p className="text-sm opacity-90 mb-4">Tim teknis kami siap membantu menyelesaikan kendala jaringan Anda.</p>
-                                <button className="btn btn-white text-primary border-none hover:bg-gray-100 w-full rounded-xl">
+                                <a
+                                    href="https://wa.me/628123456789"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn btn-white text-primary border-none hover:bg-gray-100 w-full rounded-xl"
+                                >
                                     Hubungi CS
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>

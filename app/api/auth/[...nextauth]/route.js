@@ -13,28 +13,36 @@ export const authOptions = {
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
-                await dbConnect();
+                try {
+                    await dbConnect();
 
-                const user = await User.findOne({ email: credentials.email });
+                    const user = await User.findOne({ email: credentials.email });
 
-                if (!user) {
-                    throw new Error("No user found with the email");
+                    if (!user) {
+                        console.error("[Auth] User not found:", credentials.email);
+                        throw new Error("No user found with the email");
+                    }
+
+                    const isValid = await bcrypt.compare(credentials.password, user.password);
+
+                    if (!isValid) {
+                        console.error("[Auth] Invalid password for user:", credentials.email);
+                        throw new Error("Invalid password");
+                    }
+
+                    console.log("[Auth] User authenticated successfully:", credentials.email);
+                    return {
+                        id: user._id.toString(),
+                        name: user.name,
+                        email: user.email,
+                        role: user.role,
+                        daerah: user.daerah,
+                        paket: user.paket,
+                    };
+                } catch (error) {
+                    console.error("[Auth] Authorization error:", error.message);
+                    throw error;
                 }
-
-                const isValid = await bcrypt.compare(credentials.password, user.password);
-
-                if (!isValid) {
-                    throw new Error("Invalid password");
-                }
-
-                return {
-                    id: user._id.toString(),
-                    name: user.name,
-                    email: user.email,
-                    role: user.role,
-                    daerah: user.daerah,
-                    paket: user.paket,
-                };
             },
         }),
     ],
